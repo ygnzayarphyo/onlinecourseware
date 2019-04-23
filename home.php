@@ -61,23 +61,31 @@ include ('db.php');
 	</tr>
 	
 		<?php $res = mysql_query("SELECT * FROM  category_question");
-		$stud_scores = mysql_query("SELECT * FROM stud_scores WHERE name=" . $_SESSION['SESS_MEMBER_ID']);
+		$stud_scores = mysql_query("SELECT * from category_question c LEFT JOIN stud_scores s ON c.cat_title=s.cat WHERE s.name=" . $_SESSION['SESS_MEMBER_ID']);
+		$roScore;
+		$count=0;
+		while($row = mysql_fetch_array($stud_scores)){
+			$roScore[$count]["score"]=$row["score"];
+			$roScore[$count]["cat"]=$row["cat"];
+			$roScore[$count]["title"]=$row["title"];
+			$count++;
+		}
 		while ($ro = mysql_fetch_array($res)) {
 			echo "<tr>";
 			echo "<td>" . $ro["id"] . "</td>";
 			echo "<td>" . $ro["cat_title"] . "</td>";
-			$id=-1;
-			while ($roScore = mysql_fetch_array($stud_scores)) {
-				if ($roScore["cat"] = $ro["cat_title"]) {
-					$_SESSION[$roScore["id"]."_report_score"]=$roScore["score"];
-					$_SESSION[$roScore["id"]."_report_cat"]=$roScore["cat"];
-					$_SESSION[$roScore["id"]."_report_title"]=$roScore["title"];
-					$id=$roScore["id"];
+			$id = -1;
+			for($count=0;$count<count($roScore);$count++) {
+				if (strcmp($roScore[$count]["cat"], $ro["cat_title"]) == 0) {
+					$_SESSION[$roScore["id"] . "_report_score"] = $roScore[$count]["score"];
+					$_SESSION[$roScore["id"] . "_report_cat"] = $roScore[$count]["cat"];
+					$_SESSION[$roScore["id"] . "_report_title"] = $roScore[$count]["title"];
+					$id = $roScore["id"];
 					break;
 				}
 			}
-			echo "<td><a href='" . ($id<>-1 ? "certificate.php?id=".$id : "quiz.php?id=".$ro["id"])."'>";
-			echo $id<>-1 ? "Certificate" : "go";
+			echo "<td><a href='" . ($id <> -1 ? "certificate.php?id=" . $id : "quiz.php?id=" . $ro["id"]) . "'>";
+			echo $id <> -1 ? "Certificate" : "go";
 			echo "</a> </td>";
 			echo "</tr>";
 		}//end
