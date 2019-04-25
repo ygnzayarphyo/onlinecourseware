@@ -22,7 +22,7 @@ $id=$_REQUEST["id"];
 <table border="0" cellspacing="10" cellpadding="2" background="images/certificate_border.png" style="background-size: 100% 100%;'">
 	<tr>
 		<td align="center" style="padding: 10px 10px 20px 10px;">
-		<h1><?php echo  "Su Wut Yee Co. Ltd"; ?></h1>
+		<h1><?php echo  "Online Courseware"; ?></h1>
 		
 		In recognition of successfully completing the course:<br>
 		<strong><?php echo $_SESSION[$id."_report_cat"]." of ".$_SESSION[$id."_report_title"]; ?></strong>
